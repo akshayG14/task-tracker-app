@@ -11,7 +11,12 @@ import { Task } from '../models/Task';
   providedIn: 'root'
 })
 export class TaskService {
-  apiUrl = 'http://localhost:5000/tasks';
+  private apiUrl = 'http://localhost:5000/tasks';
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+  }
 
   constructor(private http: HttpClient) { }
 
@@ -26,5 +31,10 @@ export class TaskService {
   deleteTask(task: Task): Observable<Task> {
     const url = `${this.apiUrl}/${task.id}`;
     return this.http.delete<Task>(url);
+  }
+
+  updateTaskReminder(task: Task): Observable<Task> {
+    const url = `${this.apiUrl}/${task.id}`;
+    return this.http.put<Task>(url, task, this.httpOptions);
   }
 }

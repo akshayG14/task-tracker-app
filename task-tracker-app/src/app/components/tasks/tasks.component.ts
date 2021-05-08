@@ -15,6 +15,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   tasks: Task[] = [];
   getTaskSub!: Subscription;
   deleteTaskSub!: Subscription;
+  toggleReminderSub!: Subscription;
 
   constructor(private taskService: TaskService) { }
 
@@ -28,8 +29,14 @@ export class TasksComponent implements OnInit, OnDestroy {
     });
   }
 
+  toggleReminder(task: Task): void {
+    task.reminder = !task.reminder;
+    this.toggleReminderSub = this.taskService.updateTaskReminder(task).subscribe();
+  }
+
   ngOnDestroy(): void {
     this.getTaskSub?.unsubscribe();
     this.deleteTaskSub?.unsubscribe();
+    this.toggleReminderSub?.unsubscribe();
   }
 }
