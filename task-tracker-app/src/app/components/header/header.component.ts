@@ -1,4 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { Subscription } from 'rxjs';
 
 import { UiService } from 'src/app/services/ui.service';
@@ -13,7 +15,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   showAddTask: boolean = false;
   uiSubscription: Subscription;
 
-  constructor(private uiService: UiService) {
+  constructor(private uiService: UiService, private router: Router) {
     this.uiSubscription = this.uiService.onToggle().subscribe(value => this.showAddTask = value);
   }
 
@@ -26,5 +28,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.uiSubscription?.unsubscribe();
+  }
+
+  hasRoute(route: string): boolean {
+    return this.router.url === route;
   }
 }
