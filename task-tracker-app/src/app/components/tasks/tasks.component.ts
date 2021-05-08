@@ -16,6 +16,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   getTaskSub!: Subscription;
   deleteTaskSub!: Subscription;
   toggleReminderSub!: Subscription;
+  addTaskSub!: Subscription;
 
   constructor(private taskService: TaskService) { }
 
@@ -34,9 +35,14 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.toggleReminderSub = this.taskService.updateTaskReminder(task).subscribe();
   }
 
+  addTask(task: Task): void {
+    this.addTaskSub = this.taskService.addTask(task).subscribe((task: Task) => this.tasks.push(task));
+  }
+
   ngOnDestroy(): void {
     this.getTaskSub?.unsubscribe();
     this.deleteTaskSub?.unsubscribe();
     this.toggleReminderSub?.unsubscribe();
+    this.addTaskSub?.unsubscribe();
   }
 }
