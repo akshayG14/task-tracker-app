@@ -13,15 +13,23 @@ import { Task } from '../../models/Task';
 })
 export class TasksComponent implements OnInit, OnDestroy {
   tasks: Task[] = [];
-  tasksSubscription!: Subscription;
+  getTaskSub!: Subscription;
+  deleteTaskSub!: Subscription;
 
   constructor(private taskService: TaskService) { }
 
   ngOnInit(): void {
-    this.tasksSubscription = this.taskService.getTasks().subscribe((res: Task[]) => this.tasks = res);
+    this.getTaskSub = this.taskService.getTasks().subscribe((res: Task[]) => this.tasks = res);
+  }
+
+  deleteTask(task: Task) {
+    this.deleteTaskSub = this.taskService.deleteTask(task).subscribe(() => {
+      this.tasks = this.tasks.filter(t => t.id !== task.id)
+    });
   }
 
   ngOnDestroy(): void {
-    this.tasksSubscription?.unsubscribe();
+    this.getTaskSub?.unsubscribe();
+    this.deleteTaskSub?.unsubscribe();
   }
 }
